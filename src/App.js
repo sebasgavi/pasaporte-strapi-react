@@ -3,8 +3,16 @@ import './App.css';
 import Product from './Product';
 import request from 'superagent';
 import { Grid, Button } from '@material-ui/core';
+import Login from './Login';
 
 const serverBase = 'http://192.168.130.2:1337';
+
+request.post(serverBase + '/auth/local')
+  .send({
+    identifier: 'test@test.com',
+    password: 'testasdf'
+  })
+  .then(console.log)
 
 function App() {
 
@@ -38,11 +46,12 @@ function App() {
         setCategories(response.body);
       });
   }, []);
+
+  return <Login />;
   
 
   return (
     <div className="App">
-{current}
       {categories.map((category) => {
         return <Button key={category.id}
           variant={current === category.id ? 'contained' : 'text'}
