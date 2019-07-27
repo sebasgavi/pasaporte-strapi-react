@@ -2,6 +2,9 @@ import React from 'react';
 import './App.css';
 import Product from './Product';
 import request from 'superagent';
+import { Grid } from '@material-ui/core';
+
+const serverBase = 'http://192.168.130.2:1337';
 
 function App() {
 
@@ -9,7 +12,7 @@ function App() {
 
   React.useEffect(() => {
     
-    request.get('http://localhost:1337/products')
+    request.get(serverBase + '/products')
       .then((response) => {
         console.log(response.body);
         setProducts(response.body);
@@ -20,14 +23,16 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">     
+      <Grid container spacing={2}>
         {products.map((product) => {
           if(product.images.length === 0) return null;
           
-          return <Product name={product.name} 
-            image={'http://localhost:1337' + product.images[0].url}></Product>
+          return <Grid item xs={4}>
+            <Product name={product.name} 
+              image={serverBase + product.images[0].url}></Product>
+          </Grid>
         })}
-      </header>
+      </Grid>
     </div>
   );
 }
