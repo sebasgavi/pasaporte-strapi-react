@@ -14,12 +14,6 @@ function App() {
   const [ current, setCurrent ] = React.useState('');
 
   React.useEffect(() => {
-
-    request.get(serverBase + '/categories')
-      .then((response) => {
-        console.log(response.body);
-        setCategories(response.body);
-      });
     
     let filter = '';
     if(current){
@@ -27,11 +21,23 @@ function App() {
     }
     request.get(serverBase + '/products' + filter)
       .then((response) => {
-        console.log(response.body);
+        console.log('productos');
         setProducts(response.body);
       });
 
   }, [current]);
+
+  React.useEffect(() => {
+    request.get(serverBase + '/categories')
+      .then((response) => {
+        console.log('categorias');
+        response.body.push({
+          id: '',
+          name: 'Todos',
+        });
+        setCategories(response.body);
+      });
+  }, []);
   
 
   return (
@@ -39,6 +45,8 @@ function App() {
 {current}
       {categories.map((category) => {
         return <Button key={category.id}
+          variant={current === category.id ? 'contained' : 'text'}
+          color="primary"
           onClick={() => {
             setCurrent(category.id)
           }}>{category.name}</Button>
