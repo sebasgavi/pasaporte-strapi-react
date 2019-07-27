@@ -21,13 +21,17 @@ function App() {
         setCategories(response.body);
       });
     
-    request.get(serverBase + '/products')
+    let filter = '';
+    if(current){
+      filter += '?category.id=' + current;
+    }
+    request.get(serverBase + '/products' + filter)
       .then((response) => {
         console.log(response.body);
         setProducts(response.body);
       });
 
-  }, []);
+  }, [current]);
   
 
   return (
